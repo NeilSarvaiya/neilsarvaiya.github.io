@@ -173,6 +173,131 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
 }
 
+.youtube-card {
+    background: #ffffff !important;
+    color: #333333 !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.youtube-card .project-image {
+    background: linear-gradient(135deg, #ff4444 0%, #ff6666 100%) !important;
+    padding: 2rem;
+}
+
+.youtube-card .project-placeholder {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 4px rgba(255,0,0,0.1);
+}
+
+.youtube-card .project-placeholder i {
+    color: #FF0000; /* red play triangle */
+}
+
+.youtube-card .project-content {
+    background: #ffffff !important;
+    position: relative;
+    overflow: hidden;
+    color: #333333;
+    z-index: 1;
+    padding: 1.5rem;
+}
+
+
+
+
+
+.youtube-card .project-link {
+    background: #FF0000;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.youtube-card .project-link:hover {
+    background: #cc0000;
+}
+
+/* BAPS U-Symbol Styling */
+.baps-tilak {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 2rem !important;
+    width: 100% !important;
+    height: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    max-width: unset !important;
+    max-height: unset !important;
+}
+
+.tilak-symbol {
+    position: relative;
+    width: 48px;
+    height: 60px;
+}
+
+.tilak-outer {
+    position: absolute;
+    width: 48px;
+    height: 50px;
+    background: transparent;
+    border-left: 8px solid #FFA500;
+    border-right: 8px solid #FF8C00;
+    border-bottom: 8px solid #FF8C00;
+    border-radius: 0 0 24px 24px;
+    border-top: none;
+}
+
+.tilak-outer::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 36px;
+    background: #000;
+    border-radius: 0 0 12px 12px;
+}
+
+.tilak-inner {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle, #FF4500 0%, #DC143C 100%);
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.baps-text {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
 /* Buttons */
 .btn {
     display: inline-block;
