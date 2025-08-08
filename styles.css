@@ -235,7 +235,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 1.25rem;
     background: transparent !important;
     border-radius: 0 !important;
     padding: 2rem !important;
@@ -249,16 +249,25 @@ h1, h2, h3, h4, h5, h6 {
     max-height: unset !important;
 }
 
+.baps-text {
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: 0.5px;
+}
+
 .tilak-symbol {
     position: relative;
     width: 48px;
-    height: 60px;
+    height: 50px;
 }
 
 .tilak-outer {
     position: absolute;
     width: 48px;
-    height: 50px;
+    height: 60px;
     background: transparent;
     border-left: 8px solid #FFA500;
     border-right: 8px solid #FF8C00;
@@ -275,14 +284,13 @@ h1, h2, h3, h4, h5, h6 {
     transform: translate(-50%, -50%);
     width: 24px;
     height: 36px;
-    background: #000;
     border-radius: 0 0 12px 12px;
 }
 
 .tilak-inner {
     position: absolute;
-    top: 20%;
-    left: 50%;
+    top: 33%;  /* Increased from 20% to 40% to lower the dot */
+    left: 51.5%;
     transform: translateX(-50%);
     width: 18px;
     height: 18px;
@@ -439,6 +447,124 @@ h1, h2, h3, h4, h5, h6 {
 .image-placeholder:hover {
     border-color: #2b6cb0;
     background: linear-gradient(135deg, #bee3f8, #90cdf4);
+}
+
+/* Video Container */
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: #000;
+    cursor: pointer;
+}
+
+.video-container.large {
+    grid-row: span 2;
+    aspect-ratio: 9 / 16;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+/* Video Overlay */
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    opacity: 1;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.video-container.playing .video-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.video-play-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: #2b6cb0;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.video-play-btn:hover {
+    transform: scale(1.1);
+    background: #fff;
+}
+
+/* Video Controls */
+.video-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+}
+
+.video-container:hover .video-controls,
+.video-container.playing .video-controls {
+    opacity: 1;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.control-btn i {
+    font-size: 16px;
 }
 
 .image-placeholder.large {
@@ -986,4 +1112,126 @@ justify-content: center;
         padding: 10px 20px;
         font-size: 0.9rem;
     }
+}
+
+/* Maintain 9:16 aspect ratio in fullscreen */
+.video-container.large:fullscreen,
+.video-container.large:-webkit-full-screen,
+.video-container.large:-moz-full-screen,
+.video-container.large:-ms-fullscreen {
+    aspect-ratio: 9 / 16 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.video-container.large video:fullscreen,
+.video-container.large video:-webkit-full-screen,
+.video-container.large video:-moz-full-screen,
+.video-container.large video:-ms-fullscreen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Maintain 9:16 aspect ratio for video element in fullscreen (fixed) */
+video#aboutVideo:fullscreen,
+video#aboutVideo:-webkit-full-screen,
+video#aboutVideo:-moz-full-screen,
+video#aboutVideo:-ms-fullscreen {
+    aspect-ratio: 9 / 16 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    object-fit: contain !important;
+    background: #000 !important;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-aspect-ratio: 9/16) {
+  #aboutVideoFullscreenWrapper video {
+    width: initial !important;
+    height: initial !important;
+    max-width: initial !important;
+    max-height: initial !important;
+  }
+}
+
+/* Food Carousel */
+.food-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #f5f5f5;
+    aspect-ratio: 1;
+}
+
+.food-carousel-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.food-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    border-radius: 8px;
+}
+
+.food-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.carousel-arrow:hover {
+    background: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-arrow.prev {
+    left: 10px;
+}
+
+.carousel-arrow.next {
+    right: 10px;
+}
+
+.carousel-arrow i {
+    font-size: 18px;
+    color: #333;
 }

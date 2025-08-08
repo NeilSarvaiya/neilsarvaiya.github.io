@@ -212,6 +212,164 @@ function lazyLoadImages() {
 // Initialize lazy loading
 document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
+// Video Player Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const videoContainer = document.getElementById('aboutVideoContainer');
+    const video = document.getElementById('aboutVideo');
+    const playBtn = document.getElementById('playBtn');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    
+    // Only proceed if all elements exist
+    if (videoContainer && video && playBtn && playPauseBtn && playPauseIcon && fullscreenBtn) {
+        // Play/Pause functionality
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+                videoContainer.classList.add('playing');
+                playPauseIcon.classList.remove('fa-play');
+                playPauseIcon.classList.add('fa-pause');
+            } else {
+                video.pause();
+                videoContainer.classList.remove('playing');
+                playPauseIcon.classList.remove('fa-pause');
+                playPauseIcon.classList.add('fa-play');
+            }
+        }
+        
+        // Click on video container to play/pause
+        videoContainer.addEventListener('click', function(e) {
+            // Only trigger if not clicking on controls
+            if (!e.target.closest('.control-btn')) {
+                togglePlay();
+            }
+        });
+        
+        // Play button in the center
+        playBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // If YouTube iframe is present, send play command
+            const ytIframe = document.getElementById('aboutYoutubeIframe');
+            if (ytIframe) {
+                ytIframe.contentWindow.postMessage(JSON.stringify({
+                    event: 'command',
+                    func: 'playVideo',
+                    args: []
+                }), '*');
+            } else {
+                togglePlay();
+            }
+        });
+        
+        // Play/Pause button in controls
+        playPauseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            togglePlay();
+        });
+        
+        // Fullscreen functionality
+        fullscreenBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Toggle fullscreen for the video only
+            const isFullscreen = document.fullscreenElement === video ||
+                document.webkitFullscreenElement === video ||
+                document.mozFullScreenElement === video ||
+                document.msFullscreenElement === video;
+            if (isFullscreen) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            } else {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.mozRequestFullScreen) {
+                    video.mozRequestFullScreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            }
+        });
+        
+        // Update play/pause icon when video ends
+        video.addEventListener('ended', function() {
+            videoContainer.classList.remove('playing');
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+        });
+        
+        // Keyboard controls when video is focused
+        video.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' || e.code === 'KeyK') {
+                e.preventDefault();
+                togglePlay();
+            } else if (e.code === 'KeyF') {
+                e.preventDefault();
+                fullscreenBtn.click();
+            } else if (e.code === 'Escape') {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+    }
+});
+
+// Food Carousel Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const foodCarousels = document.querySelectorAll('.food-carousel');
+    
+    foodCarousels.forEach(carousel => {
+        const track = carousel.querySelector('.food-carousel-track');
+        const slides = Array.from(track.querySelectorAll('.food-slide'));
+        const prevBtn = carousel.querySelector('.carousel-arrow.prev');
+        const nextBtn = carousel.querySelector('.carousel-arrow.next');
+        
+        let currentSlide = 0;
+        
+        // Function to update the carousel display
+        function updateCarousel() {
+            // Remove active class from all slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            // Add active class to current slide
+            slides[currentSlide].classList.add('active');
+        }
+        
+        // Event listeners for arrow buttons
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarousel();
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                updateCarousel();
+            } else if (e.key === 'ArrowRight') {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateCarousel();
+            }
+        });
+        
+        // Initialize the carousel
+        updateCarousel();
+    });
+});
+
 // Add scroll progress indicator
 function createScrollProgress() {
     const progressBar = document.createElement('div');
