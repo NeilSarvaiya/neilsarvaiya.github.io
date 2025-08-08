@@ -212,6 +212,123 @@ function lazyLoadImages() {
 // Initialize lazy loading
 document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
+// YouTube Player API
+let player;
+
+// This function creates an <iframe> (and YouTube player) after the API code downloads.
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        videoId: 'TgsV1iWVGXk',
+        playerVars: {
+            'playsinline': 1,
+            'controls': 0,
+            'disablekb': 1,
+            'enablejsapi': 1,
+            'modestbranding': 1,
+            'rel': 0
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+// The API will call this function when the video player is ready.
+function onPlayerReady(event) {
+    // Set up play/pause button
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playBtn = document.getElementById('playBtn');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const videoContainer = document.getElementById('aboutVideoContainer');
+    const videoOverlay = document.querySelector('.video-overlay');
+    
+    // Toggle play/pause
+    function togglePlay() {
+        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            playPauseIcon.className = 'fas fa-play';
+            videoOverlay.style.opacity = '1';
+        } else {
+            player.playVideo();
+            playPauseIcon.className = 'fas fa-pause';
+            videoOverlay.style.opacity = '0';
+        }
+    }
+    
+    // Toggle fullscreen
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.webkitRequestFullscreen) { /* Safari */
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) { /* IE11 */
+                videoContainer.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+    
+    // Event Listeners
+    playPauseBtn.addEventListener('click', togglePlay);
+    playBtn.addEventListener('click', function() {
+        togglePlay();
+        this.style.opacity = '0';
+        this.style.pointerEvents = 'none';
+    });
+    
+    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+    
+    // Handle spacebar for play/pause
+    document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            togglePlay();
+        }
+    });
+}
+
+// The API calls this function when the player's state changes.
+function onPlayerStateChange(event) {
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const playBtn = document.getElementById('playBtn');
+    
+    switch(event.data) {
+        case YT.PlayerState.PLAYING:
+            playPauseIcon.className = 'fas fa-pause';
+            playBtn.style.opacity = '0';
+            playBtn.style.pointerEvents = 'none';
+            break;
+        case YT.PlayerState.PAUSED:
+        case YT.PlayerState.ENDED:
+            playPauseIcon.className = 'fas fa-play';
+            playBtn.style.opacity = '1';
+            playBtn.style.pointerEvents = 'auto';
+            break;
+    }
+}
+
+// Handle fullscreen change events
+function handleFullscreenChange() {
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const icon = fullscreenBtn.querySelector('i');
+    
+    if (document.fullscreenElement) {
+        icon.className = 'fas fa-compress';
+    } else {
+        icon.className = 'fas fa-expand';
+    }
+}
+
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
 // Video Player Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const videoContainer = document.getElementById('aboutVideoContainer');
